@@ -5,8 +5,10 @@
  */
 package dining_philosophers;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -20,46 +22,107 @@ public class Dining_Philosophers {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Dining_Philosophers dp =  new Dining_Philosophers();
+        
         Scanner scanner = new Scanner(System.in);
-        int no_philosphers, no_hungry;
+        int no_philosophers, no_hungry;
 
         System.out.println("How many PHILOSOPHERS are there?");
-        no_philosphers = scanner.nextInt();
+        no_philosophers = scanner.nextInt();
         System.out.println("Among them how many are HUNGRY?");
         no_hungry = scanner.nextInt();
+        
+        int [] philosophers = new int [no_philosophers];
+        int [] hungry = new int[no_hungry];
 
-//        int [] philo_id = new int[no_hungry];
-//        int [] seat_no = new int[no_hungry];
-
-        HashMap<Integer, Integer> seats = new HashMap();
+        //Populate the philosophers array
+        for (int i = 0; i < no_philosophers; i++){
+            philosophers[i] = i;
+        }
+        
+        HashMap<Integer, Philosopher> occupiedSeats = new HashMap();
 
         System.out.println("Who are/is HUNGRY?");
-        for (int i = 0; i < no_philosphers; i++) {
+        for (int i = 0; i < no_hungry; i++) {
             System.out.println("PHILOSOPHER ID: ");
             int tmp_id = scanner.nextInt();
 
             System.out.println("Seat Number: ");
             int tmp_seatNo = scanner.nextInt();
 
-            seats.put(tmp_seatNo, tmp_id);
+            occupiedSeats.put(tmp_seatNo, new Philosopher(tmp_id));
         }
+        
+        HashMap<Integer, Integer> diningTable = dp.setTable (philosophers, occupiedSeats);
+        dp.permute(occupiedSeats.keySet().toArray());
+        
+    }
+    
+    public void dineIn(HashMap<Integer, Philosopher> seats, int[] hungry){
+        
+    }
+    
+    public void permute(Object[] o) {
+        int n = o.length;
+        int[] a = new int[n];
+        for (int i = 0; i < n; i++)
+            a[i] = (int)o[i];
+        permute(a, n);
+    }
+    
+    // print n! permutation of the elements of array a (not in order)
+    private void permute(int[] a, int n) {
+        if (n == 1) {
+            System.out.println(java.util.Arrays.toString(a));
+            return;
+        }
+        for (int i = 0; i < n; i++) {
+            swap(a, i, n-1);
+            permute(a, n-1);
+            swap(a, i, n-1);
+        }
+    } 
+    
+    private void swap(int[] a, int i, int j) {
+        int c = a[i];
+        a[i] = a[j];
+        a[j] = c;
     }
 
-//    public HashMap<Integer, Integer> setTable(int no_philo, HashMap<Integer, Integer> occupiedSeats){
-//        Object[] keys = occupiedSeats.keySet().toArray();
-//        HashMap<Integer, Integer> seats = new HashMap();
-//
-//        keys = bubbleSort(keys);
-//
-//        for (int i = 0; i < no_philo; i++) {
-//            seats.put(i, -1);
-//
-//            if (occupiedSeats.containsKey(i))
-//                seats.put(i, occupiedSeats.get(i));
-//        }
-//
-//        return seats;
-//    }
+    public HashMap<Integer, Integer> setTable(int[] philosophers, HashMap occupiedSeats){
+        Object[] keys = occupiedSeats.keySet().toArray();
+        HashMap<Integer, Integer> seats = new HashMap();
+
+        keys = bubbleSort(keys);
+
+        for (int i = 0; i < philosophers.length; i++) {
+            seats.put(i, -1);
+
+            if (occupiedSeats.containsKey(i))
+                seats.put(i, (int)occupiedSeats.get(i));
+        }
+        
+        Collection p = seats.values();
+        
+        for(Map.Entry entry : seats.entrySet()){
+            if((Integer)entry.getValue() == -1){
+                for(int i = 0; i < philosophers.length; i++){
+                    if(p.contains(i) == false){
+                        seats.replace((Integer)entry.getKey(), (Integer)entry.getValue(), i);
+                        p = seats.values();
+                        break;
+                    }
+                }
+            }     
+        }
+        
+        //Print the seat order
+        for(Map.Entry entry : seats.entrySet()){
+            System.out.println("Seat No." + entry.getKey().toString() + " -> Philosopher " + entry.getValue().toString());
+        }
+
+        return seats;
+    }
 
     private Object [] bubbleSort(Object [] array){
 
