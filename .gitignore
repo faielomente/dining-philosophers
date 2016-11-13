@@ -8,6 +8,7 @@
 *.war
 *.ear
 *.xml
+*.iml
 .DS_Store
 
 # Folder #
