@@ -98,6 +98,7 @@ public class Dining_Philosophers {
         
         while(hungry.isEmpty() == false){
             int count = 0;
+            System.out.println("--------------------------------------------------------------");
             for(Map.Entry seat : seats.entrySet()){
                 Philosopher p = (Philosopher) seat.getValue();
 
@@ -121,6 +122,7 @@ public class Dining_Philosophers {
         while(hungry.isEmpty() == false){
 //            System.out.println("item: " + item);
             int count = 0;
+            System.out.println("--------------------------------------------------------------");
             for(Map.Entry seat : seats.entrySet()){
                 Philosopher p = (Philosopher) seat.getValue();
 //                System.out.println(p.getId());
