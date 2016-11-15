@@ -5,6 +5,8 @@
  */
 package dining_philosophers;
 
+import java.util.Scanner;
+
 /**
  *
  * @author faielomente
@@ -16,8 +18,16 @@ public class Dining_Philosophers {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("");
+        Scanner scanner = new Scanner(System.in);
+        int no_philosophers;
+        int hungry;
         
+        System.out.println("Number of PHILOSOPHERS: ");
+        no_philosophers = scanner.nextInt();
+        System.out.println("How many of them are hungry?");
+        hungry = scanner.nextInt();
+        
+            
     }
     
 }
