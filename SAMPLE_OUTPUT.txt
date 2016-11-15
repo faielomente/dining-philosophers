@@ -1,0 +1,96 @@
+SCENARIO 1(ONE AT A TIME CAN EAT):
+    How many PHILOSOPHERS are there?
+    5
+    Among them how many are HUNGRY?
+    5
+    Who are/is HUNGRY?
+    PHILOSOPHER ID: 
+    1
+    Seat Number: 
+    1
+    PHILOSOPHER ID: 
+    2
+    Seat Number: 
+    2
+    PHILOSOPHER ID: 
+    3
+    Seat Number: 
+    3
+    PHILOSOPHER ID: 
+    4
+    Seat Number: 
+    4
+    PHILOSOPHER ID: 
+    0
+    Seat Number: 
+    0
+    Choose among the available SCENARIOS:
+    1. ONE can EAT at a time.
+    2. TWO an EAT at a time.
+    1
+    --------------------------------------------------------------
+    Philosopher 0 is EATING.
+    Philosopher 1 is THINKING.
+    Philosopher 2 is THINKING.
+    Philosopher 3 is THINKING.
+    Philosopher 4 is THINKING.
+    --------------------------------------------------------------
+    Philosopher 0 is THINKING.
+    Philosopher 1 is EATING.
+    Philosopher 2 is THINKING.
+    Philosopher 3 is THINKING.
+    Philosopher 4 is THINKING.
+    --------------------------------------------------------------
+    Philosopher 0 is THINKING.
+    Philosopher 1 is THINKING.
+    Philosopher 2 is EATING.
+    Philosopher 3 is THINKING.
+    Philosopher 4 is THINKING.
+    --------------------------------------------------------------
+    Philosopher 0 is THINKING.
+    Philosopher 1 is THINKING.
+    Philosopher 2 is THINKING.
+    Philosopher 3 is EATING.
+    Philosopher 4 is THINKING.
+    --------------------------------------------------------------
+    Philosopher 0 is THINKING.
+    Philosopher 1 is THINKING.
+    Philosopher 2 is THINKING.
+    Philosopher 3 is THINKING.
+    Philosopher 4 is EATING.
+
+SCENARIO 2 (TWO AT A TIME CAN EAT):
+
+    How many PHILOSOPHERS are there?
+    5
+    Among them how many are HUNGRY?
+    3
+    Who are/is HUNGRY?
+    PHILOSOPHER ID: 
+    1
+    Seat Number: 
+    1
+    PHILOSOPHER ID: 
+    2
+    Seat Number: 
+    2
+    PHILOSOPHER ID: 
+    4
+    Seat Number: 
+    4
+    Choose among the available SCENARIOS:
+    1. ONE can EAT at a time.
+    2. TWO an EAT at a time.
+    2
+    --------------------------------------------------------------
+    Philosopher 0 is THINKING.
+    Philosopher 1 is EATING.
+    Philosopher 2 is THINKING.
+    Philosopher 3 is THINKING.
+    Philosopher 4 is EATING.
+    --------------------------------------------------------------
+    Philosopher 0 is THINKING.
+    Philosopher 1 is THINKING.
+    Philosopher 2 is EATING.
+    Philosopher 3 is THINKING.
+    Philosopher 4 is THINKING.
