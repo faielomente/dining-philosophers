@@ -1,5 +1,12 @@
 # Dining_Algorithm
 
+PATH: 
+            Dining_Philosophers ▸ src ▸ dining_philosophers ▸ Dining_Philosophers.java
+            Dining_Philosophers ▸ src ▸ dining_philosophers ▸ Philosopher.java
+            Dining_Philosophers ▸ dist ▸ Dining_Philosophers.jar
+            Dining_Philosophers ▸ SAMPLE_OUTPUT.txt
+            Dining_Philosophers ▸ README.txt
+
 **How to run the program:**
 Just click the Lomente_Bankers.exe file. IF THE EXECUTABLE FILE WON'T WORK PLEASE USE THE JAR FILE AND FOLLOW THE INSTRUCTION BELOW:
             To run the file, MUST use the TERMINAL and run the .jar file:  
