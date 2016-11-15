@@ -7,9 +7,11 @@ package dining_philosophers;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
@@ -23,6 +25,7 @@ public class Dining_Philosophers {
     public static void main(String[] args) {
         // TODO code application logic here
         Dining_Philosophers dp =  new Dining_Philosophers();
+        int choice = 0;
         
         Scanner scanner = new Scanner(System.in);
         int no_philosophers, no_hungry;
@@ -33,14 +36,16 @@ public class Dining_Philosophers {
         no_hungry = scanner.nextInt();
         
         int [] philosophers = new int [no_philosophers];
-        int [] hungry = new int[no_hungry];
+//        int [] hungry = new int[no_hungry];
+        
+        
 
         //Populate the philosophers array
         for (int i = 0; i < no_philosophers; i++){
             philosophers[i] = i;
         }
         
-        HashMap<Integer, Philosopher> occupiedSeats = new HashMap();
+        HashMap<Integer, Integer> occupiedSeats = new HashMap();
 
         System.out.println("Who are/is HUNGRY?");
         for (int i = 0; i < no_hungry; i++) {
@@ -50,45 +55,118 @@ public class Dining_Philosophers {
             System.out.println("Seat Number: ");
             int tmp_seatNo = scanner.nextInt();
 
-            occupiedSeats.put(tmp_seatNo, new Philosopher(tmp_id));
+            occupiedSeats.put(tmp_seatNo, tmp_id);
+            
         }
+//        if(dp.hasConsecutive(occupiedSeats.keySet().toArray()) == true){
+//            System.out.println("INVALID! DEADLOCK IS POSSIBLE");
+//        }
+        
+        System.out.println("Choose among the available SCENARIOS:\n1. ONE can EAT at a time.\n2. TWO an EAT at a time.");
+        choice = scanner.nextInt();
         
         HashMap<Integer, Integer> diningTable = dp.setTable (philosophers, occupiedSeats);
-        dp.permute(occupiedSeats.keySet().toArray());
+        HashMap<Integer, Philosopher> arrangement = dp.dineIn(diningTable);
+        
+        if(choice == 1){
+            dp.single(arrangement, occupiedSeats.keySet());
+        }
+        else if(choice == 2){
+            
+            dp.dou(arrangement, occupiedSeats.keySet());
+        }
         
     }
     
-    public void dineIn(HashMap<Integer, Philosopher> seats, int[] hungry){
+    //Assigns seat to a philosopher
+    private HashMap<Integer, Philosopher> dineIn (HashMap<Integer, Integer> diningTable){
+        HashMap<Integer, Philosopher> tableArrangement = new HashMap<>();
         
-    }
-    
-    public void permute(Object[] o) {
-        int n = o.length;
-        int[] a = new int[n];
-        for (int i = 0; i < n; i++)
-            a[i] = (int)o[i];
-        permute(a, n);
-    }
-    
-    // print n! permutation of the elements of array a (not in order)
-    private void permute(int[] a, int n) {
-        if (n == 1) {
-            System.out.println(java.util.Arrays.toString(a));
-            return;
+        for(Map.Entry seat : diningTable.entrySet()){
+            tableArrangement.put((Integer)seat.getKey(), new Philosopher((int)seat.getValue()));
         }
-        for (int i = 0; i < n; i++) {
-            swap(a, i, n-1);
-            permute(a, n-1);
-            swap(a, i, n-1);
+        
+        for(Map.Entry seat : tableArrangement.entrySet()){
+            Philosopher p = (Philosopher) seat.getValue();
+            System.out.println("Seat No." + seat.getKey() + " -> " + "Philo " + p.getId());
         }
-    } 
-    
-    private void swap(int[] a, int i, int j) {
-        int c = a[i];
-        a[i] = a[j];
-        a[j] = c;
+        
+        return tableArrangement;
     }
+    
+    public void single(HashMap<Integer, Philosopher> seats, Set hungry){
+        
+        while(hungry.isEmpty() == false){
+            int count = 0;
+            for(Map.Entry seat : seats.entrySet()){
+                Philosopher p = (Philosopher) seat.getValue();
 
+                if(hungry.contains(seat.getKey()) && count == 0){
+                    p.setIsEating(true);
+                    System.out.println("Philosopher " + p.getId() + " is EATING.");
+                    p.setDone(true);
+                    seats.replace((Integer)seat.getKey(), (Philosopher) seat.getValue(), p);
+                    hungry.remove(seat.getKey());
+                    count ++;
+                }
+                else
+                    System.out.println("Philosopher " + p.getId() + " is THINKING.");
+            }
+        }
+    }
+    
+    public void dou(HashMap<Integer, Philosopher> seats, Set hungry){
+        TreeSet<Integer> sorted = new TreeSet<>(hungry);
+        
+        while(hungry.isEmpty() == false){
+//            System.out.println("item: " + item);
+            int count = 0;
+            for(Map.Entry seat : seats.entrySet()){
+                Philosopher p = (Philosopher) seat.getValue();
+//                System.out.println(p.getId());
+                
+                if(sorted.contains(seat.getKey()) && p.isIsEating() == false){
+                    Integer item = (Integer) seat.getKey();
+                    boolean available = areForksAvailable(seats, sorted, item);
+//                    boolean beside = seats.get((item+1)%(seats.size()-1)).isIsEating();
+                    
+                    if (available == true && count < 2){
+                        p.setIsEating(true);
+                        System.out.println("Philosopher " + p.getId() + " is EATING.");
+                        p.setDone(true);
+                        seats.replace((Integer)seat.getKey(), (Philosopher) seat.getValue(), p);
+                        hungry.remove(item);
+                        count++;
+                    }
+                    else
+                        System.out.println("Philosopher " + p.getId() + " is THINKING.");
+                }
+                else
+                    System.out.println("Philosopher " + p.getId() + " is THINKING.");
+            }
+        }
+        
+    }
+    
+    private boolean areForksAvailable(HashMap<Integer, Philosopher> seats, TreeSet<Integer> ts, Integer item){
+        Integer prev = ts.lower(item);
+        Integer next = ts.higher(item);
+        
+        if(prev == null)
+            prev = ts.last();
+        else if (next == null)
+            next = ts.first();
+        
+        if(((item-prev) == 1) || ((next - item) == 1) || (next == 0) || (prev == (seats.size()-1))){
+            if((seats.get(prev).isIsEating() == false && seats.get(next).isIsEating() == true) || 
+                    (seats.get(prev).isIsEating() == true && seats.get(next).isIsEating() == false)){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     public HashMap<Integer, Integer> setTable(int[] philosophers, HashMap occupiedSeats){
         Object[] keys = occupiedSeats.keySet().toArray();
         HashMap<Integer, Integer> seats = new HashMap();
